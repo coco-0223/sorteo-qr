@@ -1,0 +1,8 @@
+{
+  "name": "sorteo-qr",
+  "version": "1.0.0",
+  "description": "Registro Sorteo QR a Google Sheets",
+  "scripts": {
+    "start": "serve ."
+  }
+}
