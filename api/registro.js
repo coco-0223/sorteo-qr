@@ -51,8 +51,43 @@ export default async function handler(req, res) {
 
     const accessToken = tokenData.access_token;
 
-    // 2. Insertar fila en Google Sheets
-    const appendUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Sheet1!A:B:append?valueInputOption=USER_ENTERED`;
+    // Normalizar teléfono (solo dígitos)
+    const cleanPhone = String(telefono).replace(/\D/g, '');
+
+    // Fecha actual de Argentina (formato YYYY-MM-DD para agrupar)
+    const argentinaDateStr = argentinaTime.toISOString().slice(0, 10);
+    const argentinaTimestamp = argentinaTime.toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
+
+    // 2. Leer registros para validar límite en el servidor por teléfono + día
+    // Las columnas son: [Nombre, Teléfono, Fecha/Timestamp]
+    const readUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Sheet1!A:C`;
+    const readRes = await fetch(readUrl, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    const readData = await readRes.json();
+    const rows = readData.values || [];
+
+    // Contar cuántas veces cargó este teléfono hoy
+    let todayCount = 0;
+    for (const row of rows) {
+      const rowPhone = String(row[1] || '').replace(/\D/g, '');
+      const rowDate = String(row[2] || '');
+      
+      if (rowPhone === cleanPhone) {
+        // Si tiene fecha registrada y coincide con el día de hoy, o si es formato clásico
+        if (rowDate.includes(argentinaDateStr) || rowDate.includes(argentinaTime.toLocaleDateString('es-AR'))) {
+          todayCount++;
+        }
+      }
+    }
+
+    // Si ya superó el máximo de 3 por día, simulamos éxito silencioso (no se escribe en Sheets)
+    if (todayCount >= 3) {
+      return res.status(200).json({ status: 'success', note: 'daily_limit_reached' });
+    }
+
+    // 3. Insertar fila en Google Sheets con Timestamp
+    const appendUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Sheet1!A:C:append?valueInputOption=USER_ENTERED`;
 
     const sheetsRes = await fetch(appendUrl, {
       method: 'POST',
@@ -61,7 +96,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        values: [[nombre, telefono]],
+        values: [[nombre, telefono, `${argentinaTimestamp} (${argentinaDateStr})`]],
       }),
     });
 
