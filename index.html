@@ -214,6 +214,50 @@
       line-height: 1.5;
     }
 
+    .ig-card {
+      margin-top: 24px;
+      padding: 16px;
+      background: #fff8f3;
+      border: 1.5px solid #ff7a00;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ig-text {
+      font-size: 0.88rem;
+      color: #334155;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .ig-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 10px 18px;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(220, 39, 67, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .ig-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(220, 39, 67, 0.45);
+    }
+
+    .ig-link svg {
+      width: 18px;
+      height: 18px;
+    }
+
     .footer-note {
       margin-top: 24px;
       font-size: 0.78rem;
@@ -317,10 +361,22 @@
       </div>
       <h2>¡Participación registrada!</h2>
       <p class="subtitle" style="margin-top: 8px;">Tus datos fueron cargados con éxito. ¡Muchas gracias por participar!</p>
+      
+      <div class="ig-card">
+        <p class="ig-text">Seguinos en Instagram para más sorteos y estar al tanto de todo:</p>
+        <a href="https://www.instagram.com/rociocarnicerias" target="_blank" rel="noopener noreferrer" class="ig-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          @rociocarnicerias
+        </a>
+      </div>
     </div>
 
     <div class="footer-note">
-      Rocío Carnicería & Granja • Registro oficial
+      Rocío Carnicerías & Granja
     </div>
   </div>
 
